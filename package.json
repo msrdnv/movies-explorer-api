@@ -1,0 +1,38 @@
+{
+  "name": "movies-explorer-api",
+  "version": "1.0.0",
+  "description": "movies-explorer-api",
+  "main": "app.js",
+  "scripts": {
+    "lint": "npx eslint .",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/msrdnv/movies-explorer-api.git"
+  },
+  "author": "msrdnv",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/msrdnv/movies-explorer-api/issues"
+  },
+  "homepage": "https://github.com/msrdnv/movies-explorer-api#readme",
+  "devDependencies": {
+    "eslint": "^8.48.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.28.1",
+    "nodemon": "^3.0.1"
+  },
+  "dependencies": {
+    "celebrate": "^15.0.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.1",
+    "express-winston": "^4.2.0",
+    "helmet": "^7.0.0",
+    "mongoose": "^7.6.2",
+    "validator": "^13.11.0",
+    "winston": "^3.11.0"
+  }
+}
