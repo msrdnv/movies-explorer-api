@@ -1,3 +1,4 @@
+const httpConstants = require('http2').constants;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
@@ -24,7 +25,7 @@ module.exports.createUser = (req, res, next) => {
       password: hash,
       name: req.body.name,
     }))
-    .then((data) => res.status(201).send(returnUserInfo(data)))
+    .then((data) => res.status(httpConstants.HTTP_STATUS_CREATED).send(returnUserInfo(data)))
     .catch(next);
 };
 
@@ -38,7 +39,7 @@ module.exports.getUserInfo = (req, res, next) => {
 module.exports.updateUserInfo = (req, res, next) => {
   User.findByIdAndUpdate(
     req.user._id,
-    { email: req.body.email, name: req.body.email },
+    { email: req.body.email, name: req.body.name },
     { new: true, runValidators: true },
   )
     .orFail()

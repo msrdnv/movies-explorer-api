@@ -1,3 +1,4 @@
+const httpConstants = require('http2').constants;
 const Movie = require('../models/movie');
 const ForbiddenError = require('../utils/ForbiddenError');
 
@@ -37,7 +38,7 @@ module.exports.createMovie = (req, res, next) => {
     nameRU: req.body.nameRU,
     nameEN: req.body.nameEN,
   })
-    .then((data) => res.status(201).send(returnMovieInfo(data)))
+    .then((data) => res.status(httpConstants.HTTP_STATUS_CREATED).send(returnMovieInfo(data)))
     .catch(next);
 };
 
@@ -46,7 +47,7 @@ module.exports.deleteMovie = (req, res, next) => {
     .orFail()
     .then((movie) => {
       if (!movie.owner.equals(req.user._id)) {
-        return next(new ForbiddenError('Вы не можете удалять чужие карточки!'));
+        return next(new ForbiddenError('Вы не можете удалять чужие фильмы!'));
       }
       return Movie.findByIdAndRemove(req.params.movieId)
         .orFail()
