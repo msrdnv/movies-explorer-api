@@ -4,11 +4,13 @@ const mongoose = require('mongoose');
 const helmet = require('helmet');
 const { celebrate, Joi, errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { limiter } = require('./middlewares/limiter');
 
 const { login, createUser } = require('./controllers/users');
 const index = require('./routes/index');
 const auth = require('./middlewares/auth');
-const { limiter } = require('./middlewares/limiter');
+const { handleErrors } = require('./middlewares/handleErrors');
+const { handleNotFoundPage } = require('./middlewares/handleNotFoundPage');
 
 const { PORT = 3000, DB_URL = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
 mongoose.connect(DB_URL);
@@ -36,6 +38,8 @@ app.post('/signup', celebrate({
 app.use('/', auth, index);
 app.use(errorLogger);
 app.use(errors());
+app.use(handleErrors);
+app.use('*', handleNotFoundPage);
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
