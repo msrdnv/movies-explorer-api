@@ -3,6 +3,7 @@ const Movie = require('../models/movie');
 const ForbiddenError = require('../utils/ForbiddenError');
 
 const returnMovieInfo = (data) => ({
+  id: data._id,
   country: data.country,
   director: data.director,
   duration: data.duration,
