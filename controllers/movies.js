@@ -1,6 +1,7 @@
 const httpConstants = require('http2').constants;
 const Movie = require('../models/movie');
 const ForbiddenError = require('../utils/ForbiddenError');
+const { messages } = require('../utils/constants');
 
 const returnMovieInfo = (data) => ({
   id: data._id,
@@ -19,7 +20,8 @@ const returnMovieInfo = (data) => ({
 });
 
 module.exports.findMovies = (req, res, next) => {
-  Movie.find({})
+  Movie.find({ owner: req.user._id })
+    .orFail()
     .then((data) => res.send(data.map((item) => returnMovieInfo(item))))
     .catch(next);
 };
@@ -48,11 +50,11 @@ module.exports.deleteMovie = (req, res, next) => {
     .orFail()
     .then((movie) => {
       if (!movie.owner.equals(req.user._id)) {
-        return next(new ForbiddenError('Вы не можете удалять чужие фильмы!'));
+        return next(new ForbiddenError(messages.forbiddenRemovalError));
       }
       return Movie.findByIdAndRemove(req.params.movieId)
         .orFail()
-        .then(() => res.send({ message: 'Фильм удалён' }))
+        .then(() => res.send({ message: messages.successfulFilmRemoval }))
         .catch(next);
     })
     .catch(next);

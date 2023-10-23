@@ -2,20 +2,18 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
-const { celebrate, Joi, errors } = require('celebrate');
+const { errors } = require('celebrate');
+
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { limiter } = require('./middlewares/limiter');
-
-const { login, createUser } = require('./controllers/users');
-const index = require('./routes/index');
-const auth = require('./middlewares/auth');
 const { handleErrors } = require('./middlewares/handleErrors');
 const { handleNotFoundPage } = require('./middlewares/handleNotFoundPage');
 const { handleCorsOrigin } = require('./middlewares/handleCorsOrigin');
 const { handleCorsPreflight } = require('./middlewares/handleCorsPreflight');
 
-const { PORT = 3000, DB_URL = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
-mongoose.connect(DB_URL);
+const index = require('./routes/index');
+
+mongoose.connect(process.env.DB_URL);
 
 const app = express();
 
@@ -26,25 +24,12 @@ app.use(limiter);
 app.use(handleCorsOrigin);
 app.use(handleCorsPreflight);
 app.use(requestLogger);
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-  }),
-}), login);
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-    name: Joi.string().required().min(2).max(30),
-  }),
-}), createUser);
-app.use('/', auth, index);
+app.use('/', index);
 app.use(errorLogger);
 app.use(errors());
 app.use(handleErrors);
 app.use('*', handleNotFoundPage);
 
-app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`App listening on port ${process.env.PORT}`);
 });
