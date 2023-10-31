@@ -29,10 +29,6 @@ module.exports.createUser = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.signout = (req, res) => {
-  res.clearCookie('jwt').end();
-};
-
 module.exports.getUserInfo = (req, res, next) => {
   User.findById(req.user._id)
     .orFail()
