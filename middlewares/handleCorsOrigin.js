@@ -1,6 +1,6 @@
 const allowedCors = [
-  'http://movies-explorer.msrdnv.nomoredomainsrocks.ru',
-  'https://movies-explorer.msrdnv.nomoredomainsrocks.ru',
+  'http://movies.msrdnv.nomoredomainsrocks.ru',
+  'https://movies.msrdnv.nomoredomainsrocks.ru',
   'http://localhost:3001',
 ];
 
